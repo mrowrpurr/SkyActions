@@ -4,6 +4,6 @@ event OnActionInit()
     ActionName = "placeat"
 endEvent
 
-event RunAction()
+event OnAction()
     Game.GetPlayer().PlaceAtMe(Game.GetForm(0x10982B))
 endEvent

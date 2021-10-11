@@ -15,6 +15,6 @@ event OnInit()
 endEvent
 
 ; Run this action
-event RunAction()
+event OnAction()
     ; Meant to be overriden by the mod author
 endEvent

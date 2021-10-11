@@ -10,7 +10,7 @@ endEvent
 function ShowUI()
     string actionName = Choose(SkyActions.GetInstance().GetAllActionNames())
     SkyAction actionScript = SkyActions.GetSkyAction(actionName)
-    actionScript.RunAction()
+    actionScript.OnAction()
 endFunction
 
 string function Choose(string[] items, string query = "", bool search = true)

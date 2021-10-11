@@ -7,7 +7,7 @@ event OnActionInit()
     ActionName = "rain"
 endEvent
 
-event RunAction()
+event OnAction()
     Actor player     = Game.GetPlayer()
     Form catForm     = Game.GetFormFromFile(0x1b47f, "ACatsLife.esp")
     Form dogForm     = Game.GetForm(0x23A92)
