@@ -1,7 +1,7 @@
 scriptName SkyAction extends Quest
 { TODO DOCUMENTATION }
 
-string ActionName property auto
+string property ActionName auto
 
 ; User initialization code for this action
 event OnActionInit()
@@ -12,4 +12,9 @@ endEvent
 event OnInit()
     OnActionInit()
     SkyActions.RegisterAction(ActionName, self)
+endEvent
+
+; Run this action
+event RunAction()
+    ; Meant to be overriden by the mod author
 endEvent
