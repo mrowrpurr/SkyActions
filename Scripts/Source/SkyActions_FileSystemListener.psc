@@ -10,6 +10,7 @@ endEvent
 
 event OnUpdate()
     int files = JValue.readFromDirectory(API.FileSystemListenerPath)
+    JValue.retain(files)
     string[] fileNames = JMap.allKeysPArray(files)
     int i = 0
     while i < fileNames.Length
@@ -19,7 +20,7 @@ event OnUpdate()
             string actionName = JMap.getStr(file, "actionName")
             if API.ActionExists(actionName)
                 SkyAction actionScript = SkyActions.GetSkyAction(actionName)
-                actionScript.OnAction()
+                actionScript.InvokeAction(file)
             else
                 SkyActions.Log("Action type not found: " + actionName)
                 JMap.setStr(file, "failed", "true")
@@ -30,5 +31,6 @@ event OnUpdate()
         endIf
         i += 1
     endWhile
+    JValue.release(files)
     RegisterForSingleUpdate(SkyActions_FileSystemListenerInterval.Value)
 endEvent

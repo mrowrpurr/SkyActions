@@ -5,5 +5,17 @@ event OnActionInit()
 endEvent
 
 event OnAction()
-    Game.GetPlayer().PlaceAtMe(Game.GetForm(0x10982B))
+    if ProvidedForm
+        Debug.Messagebox(GetString("username") + " placed " + \
+            GetInt("count") + "x " + ProvidedForm.GetName() + " at player")
+        Game.GetPlayer().PlaceAtMe(ProvidedForm, GetInt("count"))
+    else
+        Debug.MessageBox("Sorry " + GetString("username") + ", but the item number " + GetString("item") + " did not work. :(")
+    endIF
 endEvent
+
+Form property ProvidedForm
+    Form function get()
+        return FormHelper.HexToForm(GetString("item"))
+    endFunction
+endProperty
