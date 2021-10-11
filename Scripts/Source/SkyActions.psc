@@ -8,6 +8,7 @@ Scriptname SkyActions extends Quest
 ; Mod Installation
 event OnInit()
     CurrentlyInstalledModVersion = GetCurrentVersion()
+    WaitUntilReady()
 endEvent
 
 ; Save Game Loaded
@@ -34,9 +35,16 @@ SkyActions function GetInstance() global
     return api
 endFunction
 
-function WaitUntilReady()
-    ; Ensure that Save Game and File System data are prepared
+bool _ready = false
 
+function WaitUntilReady()
+    if _ready
+        return
+    else
+        _ready = true
+    endIf
+
+    ; Ensure that Save Game and File System data are prepared
     SaveGameData   ; Setup Save Game Data
     FileSystemData ; Setup File System Data
     
@@ -83,9 +91,7 @@ endFunction
 SkyAction function GetSkyAction(string actionName) global
     SkyActions api = SkyActions.GetInstance()
     int actionMap = JMap.getObj(api.ActionsByNameMap, actionName)
-    Debug.MessageBox("Map: " + actionMap)
     int slot = JMap.getInt(actionMap, "actionScriptArraySlotNumber")
-    Debug.MessageBox("Slot: " + slot)
     return api.GetActionScript(slot)
 endFunction
 
@@ -124,7 +130,6 @@ function InitializeAvailableActionArrayRegistrationSlots()
         JArray.addInt(slots, i)
         i += 1
     endWhile
-    Debug.MessageBox("Slots Available: " + JArray.asIntArray(slots))
 endFunction
 
 int property AvailableActionScriptRegistrationSlots
@@ -138,8 +143,6 @@ int function StoreActionScript(SkyAction actionScript)
 
     int arrayNumber = slot / 128
     int arrayIndex = slot % 128
-
-    Debug.MessageBox("Store Action Script, Array Number: " + arrayNumber + " Index " + arrayIndex + " Script: " + actionScript)
 
     if arrayNumber == 0
         _skyActionsArray0[arrayIndex] = actionScript
@@ -189,9 +192,6 @@ endFunction
 SkyAction function GetActionScript(int slot)
     int arrayNumber = slot / 128
     int arrayIndex = slot % 128
-
-    Debug.MessageBox("Array number: " + arrayNumber + " Array Index: " + arrayIndex)
-    Debug.MessageBox("Array 0: " + _skyActionsArray0)
 
     if arrayNumber == 0
         return _skyActionsArray0[arrayIndex]
@@ -253,7 +253,6 @@ int function GetNextAvailableActionScriptRegistrationSlot(float lock = 0.0)
         if _nextAvailableActionScriptRegistrationSlotLock == lock
             ; Get and return the slot
             if JArray.count(AvailableActionScriptRegistrationSlots) > 0
-                Debug.MessageBox("Available Action Slots Array: " + AvailableActionScriptRegistrationSlots)
                 int availableSlot = JArray.getInt(AvailableActionScriptRegistrationSlots, 0)
                 JArray.eraseIndex(AvailableActionScriptRegistrationSlots, 0)
                 _nextAvailableActionScriptRegistrationSlotLock = 0

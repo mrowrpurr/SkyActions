@@ -10,7 +10,6 @@ endEvent
 function ShowUI()
     string actionName = Choose(SkyActions.GetInstance().GetAllActionNames())
     SkyAction actionScript = SkyActions.GetSkyAction(actionName)
-    Debug.MessageBox("Action " + actionName + " Script: " + actionScript)
     actionScript.RunAction()
 endFunction
 
