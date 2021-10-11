@@ -8,6 +8,7 @@ Scriptname SkyActions extends Quest
 ; Mod Installation
 event OnInit()
     CurrentlyInstalledModVersion = GetCurrentVersion()
+    FileSystemListenerPath = "SkyActions/AutoTriggeredActions"
     WaitUntilReady()
 endEvent
 
@@ -23,6 +24,14 @@ float property CurrentlyInstalledModVersion auto
 
 float function GetCurrentVersion() global
     return 1.0
+endFunction
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Logging
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+function Log(string text) global
+    Debug.Trace("[SkyActions] " + text)
 endFunction
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -51,6 +60,15 @@ function WaitUntilReady()
     InitializeActionArrays()
     InitializeAvailableActionArrayRegistrationSlots()
 endFunction
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; File System Listener
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Set this to change the path where Sky Actions listens for new files to be added.
+; Note: you are responsible for cleaning up (deleting) completed action files.
+; Default path: [Skyrim Root Directory]\SkyActions\AutoTriggeredActions
+string property FileSystemListenerPath auto
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Action Registration
@@ -97,6 +115,10 @@ endFunction
 
 string[] function GetAllActionNames()
     return JMap.allKeysPArray(ActionsByNameMap)
+endFunction
+
+bool function ActionExists(string actionName)
+    return JMap.hasKey(ActionsByNameMap, actionName)
 endFunction
 
 function InitializeActionArrays()
