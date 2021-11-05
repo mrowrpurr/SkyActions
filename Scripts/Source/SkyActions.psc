@@ -74,6 +74,7 @@ string property FileSystemListenerPath auto
 ;; Action Registration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+float lockVariable
 int property MAX_SKY_ACTIONS_COUNT = 2560 autoReadonly
 
 SkyAction[] _skyActionsArray0
@@ -98,16 +99,21 @@ SkyAction[] _skyActionsArray18
 SkyAction[] _skyActionsArray19
 
 function RegisterAction(string actionName, SkyAction actionScript) global
+    Log("Registering " + actionName + " " + actionScript)
+    Debug.Notification("!" + actionName)
     SkyActions api = SkyActions.GetInstance()
+    api.GetLock()
     int newAction = JMap.object()
     JMap.setObj(api.ActionsByNameMap, actionName, newAction)
     JMap.setStr(newAction, "name", actionName)
     JMap.setInt(newAction, "actionScriptArraySlotNumber", api.StoreActionScript(actionScript))
     JMap.setInt(newAction, "ready", 1)
+    api.ReleaseLock()
 endFunction
 
 SkyAction function GetSkyAction(string actionName) global
     SkyActions api = SkyActions.GetInstance()
+    JValue.writeToFile(api.SaveGameData, "SkyActions_SaveGameData.json")
     int actionMap = JMap.getObj(api.ActionsByNameMap, actionName)
     int slot = JMap.getInt(actionMap, "actionScriptArraySlotNumber")
     return api.GetActionScript(slot)
@@ -258,38 +264,46 @@ SkyAction function GetActionScript(int slot)
     endIf
 endFunction
 
-float _nextAvailableActionScriptRegistrationSlotLock
+int function GetNextAvailableActionScriptRegistrationSlot()
+    ; Get and return the slot
+    if JArray.count(AvailableActionScriptRegistrationSlots) > 0
+        int availableSlot = JArray.getInt(AvailableActionScriptRegistrationSlots, 0)
+        JArray.eraseIndex(AvailableActionScriptRegistrationSlots, 0)
+        lockVariable = 0
+        return availableSlot
+    else
+        Debug.Trace("There are no more available slots for Actions")
+        return 0
+    endIf
+endFunction
 
-int function GetNextAvailableActionScriptRegistrationSlot(float lock = 0.0)
+function GetLock(float lock = 0.0)
+    Log("Acquiring lock...")
     if lock == 0
         lock = Utility.RandomFloat(0, 1000000.0)
     endIf
 
-    while _nextAvailableActionScriptRegistrationSlotLock
+    while lockVariable
         Utility.WaitMenuMode(0.1)
     endWhile
 
-    _nextAvailableActionScriptRegistrationSlotLock = lock
+    lockVariable = lock
 
-    if _nextAvailableActionScriptRegistrationSlotLock == lock
-        if _nextAvailableActionScriptRegistrationSlotLock == lock
-            ; Get and return the slot
-            if JArray.count(AvailableActionScriptRegistrationSlots) > 0
-                int availableSlot = JArray.getInt(AvailableActionScriptRegistrationSlots, 0)
-                JArray.eraseIndex(AvailableActionScriptRegistrationSlots, 0)
-                _nextAvailableActionScriptRegistrationSlotLock = 0
-                return availableSlot
-            else
-                Debug.Trace("There are no more available slots for Actions")
-                return 0
-            endIf
-            ; 
+    if lockVariable == lock
+        if lockVariable == lock
+            Log("Lock Acquired!")
+            return
         else
-            return GetNextAvailableActionScriptRegistrationSlot(lock)
+            return GetLock(lock)
         endIf
     else
-        return GetNextAvailableActionScriptRegistrationSlot(lock)
+        return GetLock(lock)
     endIf
+endFunction
+
+function ReleaseLock()
+    Log("Lock Released!")
+    lockVariable = 0.0
 endFunction
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

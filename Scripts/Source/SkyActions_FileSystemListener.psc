@@ -9,6 +9,9 @@ event OnEffectStart(Actor target, Actor caster)
 endEvent
 
 event OnUpdate()
+    ; Debug.MessageBox("API: " + API)
+    JValue.writeToFile(API.SaveGameData, "SkyActions_SaveGameData.json")
+
     int files = JValue.readFromDirectory(API.FileSystemListenerPath)
     JValue.retain(files)
     string[] fileNames = JMap.allKeysPArray(files)

@@ -5,10 +5,15 @@ event OnActionInit()
 endEvent
 
 event OnAction()
-    if ProvidedForm
+    Form theForm = ProvidedForm
+    Actor formAsActor = theForm as Actor
+    if formAsActor
+        theForm = formAsActor.GetActorBase()
+    endIf
+    if theForm
         Debug.Messagebox(GetString("username") + " placed " + \
-            GetInt("count") + "x " + ProvidedForm.GetName() + " at player")
-        Game.GetPlayer().PlaceAtMe(ProvidedForm, GetInt("count"))
+            GetInt("count") + "x " + theForm.GetName() + " at player")
+        Game.GetPlayer().PlaceAtMe(theForm, GetInt("count"))
     else
         Debug.MessageBox("Sorry " + GetString("username") + ", but the item number " + GetString("item") + " did not work. :(")
     endIF

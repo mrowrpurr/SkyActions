@@ -13,19 +13,28 @@ event OnAction()
     Form dogForm     = Game.GetForm(0x23A92)
     Form giantForm   = Game.GetForm(0x23AAE)
     Form mysteryForm = Game.GetForm(0x12EB7)
+    Form drinkForm   = Game.GetForm(0xc5349)
 
     ; Debug.MessageBox(Username + " is making it rain cats and dogs!")
 
     int i = 0
     while i < 300
 
-        ObjectReference mystery = SpawnMarker.PlaceAtMe(mysteryForm)
-        float x = Utility.RandomFloat(-300, 300)
-        float y = Utility.RandomFloat(-300, 300)
-        float z = Utility.RandomFloat(200, 600)
-        PlacementMarker.MoveTo(player, afXOffset = x, afYOffset = y, afZOffset = z)
-        mystery.MoveTo(PlacementMarker)
-        mystery.MoveTo(PlacementMarker)
+        ; ObjectReference drink = SpawnMarker.PlaceAtMe(drinkForm)
+        ; float x = Utility.RandomFloat(-300, 300)
+        ; float y = Utility.RandomFloat(-300, 300)
+        ; float z = Utility.RandomFloat(4000, 5000)
+        ; PlacementMarker.MoveTo(player, afXOffset = x, afYOffset = y, afZOffset = z)
+        ; drink.MoveTo(PlacementMarker)
+        ; drink.MoveTo(PlacementMarker)
+
+        ; ObjectReference mystery = SpawnMarker.PlaceAtMe(mysteryForm)
+        ; float x = Utility.RandomFloat(-300, 300)
+        ; float y = Utility.RandomFloat(-300, 300)
+        ; float z = Utility.RandomFloat(200, 600)
+        ; PlacementMarker.MoveTo(player, afXOffset = x, afYOffset = y, afZOffset = z)
+        ; mystery.MoveTo(PlacementMarker)
+        ; mystery.MoveTo(PlacementMarker)
 
         ; Actor giant = SpawnMarker.PlaceAtMe(giantForm) as Actor
         ; giant.SetActorValue("Health", 10000)
@@ -36,23 +45,23 @@ event OnAction()
         ; giant.MoveTo(PlacementMarker)
         ; giant.MoveTo(PlacementMarker)
 
-        ; Actor cat = SpawnMarker.PlaceAtMe(catForm) as Actor
-        ; cat.SetActorValue("Health", 10000)
-        ; float x = Utility.RandomFloat(-800, 800)
-        ; float y = Utility.RandomFloat(-800, 800)
-        ; float z = Utility.RandomFloat(600, 1000)
-        ; PlacementMarker.MoveTo(player, afXOffset = x, afYOffset = y, afZOffset = z)
-        ; cat.MoveTo(PlacementMarker)
-        ; cat.MoveTo(PlacementMarker)
+        Actor cat = SpawnMarker.PlaceAtMe(catForm) as Actor
+        cat.SetActorValue("Health", 10000)
+        float x = Utility.RandomFloat(-800, 800)
+        float y = Utility.RandomFloat(-800, 800)
+        float z = Utility.RandomFloat(600, 1000)
+        PlacementMarker.MoveTo(player, afXOffset = x, afYOffset = y, afZOffset = z)
+        cat.MoveTo(PlacementMarker)
+        cat.MoveTo(PlacementMarker)
 
-        ; Actor dog = SpawnMarker.PlaceAtMe(dogForm) as Actor
-        ; dog.SetActorValue("Health", 10000)
-        ; x = Utility.RandomFloat(-800, 800)
-        ; y = Utility.RandomFloat(-800, 800)
-        ; z = Utility.RandomFloat(600, 1000)
-        ; PlacementMarker.MoveTo(player, afXOffset = x, afYOffset = y, afZOffset = z)
-        ; dog.MoveTo(PlacementMarker)
-        ; dog.MoveTo(PlacementMarker)
+        Actor dog = SpawnMarker.PlaceAtMe(dogForm) as Actor
+        dog.SetActorValue("Health", 10000)
+        x = Utility.RandomFloat(-800, 800)
+        y = Utility.RandomFloat(-800, 800)
+        z = Utility.RandomFloat(600, 1000)
+        PlacementMarker.MoveTo(player, afXOffset = x, afYOffset = y, afZOffset = z)
+        dog.MoveTo(PlacementMarker)
+        dog.MoveTo(PlacementMarker)
 
         i += 1
     endWhile
