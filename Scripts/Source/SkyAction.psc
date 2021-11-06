@@ -1,22 +1,28 @@
 scriptName SkyAction
 
-function PerformAction(int actionRef) global
-    string actionName = JMap.getStr(actionRef, "action")
-    int    params     = JMap.getObj(actionRef, "params")
+string function GetParamString(int actionRef, string propertyName, string default = "") global
+    int params = JMap.getObj(actionRef, "params")
+    if params && JMap.hasKey(params, propertyName)
+        return JMap.getStr(params, propertyName)
+    else
+        return default
+    endIf
+endFunction
 
-    string text = "Action: " + actionName + "\n"
-    string[] paramNames = JMap.allKeysPArray(params)
-    text += "Param Count: " + paramNames.Length + "\n"
-    int i = 0
-    while i < paramNames.Length
-        string paramName = paramNames[i]
-        int valueType = JMap.valueType(params, paramName)
-        if valueType == 2
-            text += paramName + " is type: " + valueType + " Value: " + JMap.getInt(params, paramName) + " [" + JMap.getStr(params, paramName) + "]\n"
-        else
-            text += paramName + " is type: " + valueType + "\n"
-        endIf
-        i += 1
-    endWhile
-    Debug.MessageBox(text)
+int function GetParamInt(int actionRef, string propertyName, int default = 0) global
+    int params = JMap.getObj(actionRef, "params")
+    if params && JMap.hasKey(params, propertyName)
+        return JMap.getInt(params, propertyName)
+    else
+        return default
+    endIf
+endFunction
+
+Form function GetParamForm(int actionRef, string propertyName, Form default = None) global
+    int params = JMap.getObj(actionRef, "params")
+    if params && JMap.hasKey(params, propertyName)
+        return JMap.getForm(params, propertyName)
+    else
+        return default
+    endIf
 endFunction
