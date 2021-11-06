@@ -15,6 +15,7 @@ endEvent
 
 function ListenForActions()
     SkyActions.ListenForAction_Alias(self, "PlaceAtPlayer")
+    SkyActions.ListenForAction_Alias(self, "GiveToPlayer")
 endFunction
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -25,4 +26,10 @@ event OnPlaceAtPlayer(int actionRef)
     int count = SkyAction.GetParamInt(actionRef, "count", default = 1)
     Form theForm = SkyAction.GetParamForm(actionRef, "form")
     GetActorReference().PlaceAtMe(theForm, count)
+endEvent
+
+event OnGiveToPlayer(int actionRef)
+    int count = SkyAction.GetParamInt(actionRef, "count", default = 1)
+    Form theForm = SkyAction.GetParamForm(actionRef, "form")
+    GetActorReference().AddItem(theForm, count)
 endEvent
